@@ -46,8 +46,7 @@ class Student:
 
     def save(self, name='student'):
         savefolder = os.path.join(self.args.logdir, name)
-        if self.logger: # rev
-            self.logger.info('Saving {} to {}'.format(name, savefolder))
+        self.logger.info('Saving {} to {}'.format(name, savefolder))
         os.makedirs(savefolder, exist_ok=True)
         self.trainer.save(savefolder)
 

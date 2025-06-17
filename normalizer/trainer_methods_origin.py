@@ -306,15 +306,12 @@ def inference(
     inputs = tokenizer(user_input, return_tensors="pt")
     source_tokens = tokenizer.tokenize(user_input)
     add_special_token(source_tokens)
-
-    input_tokens_tensor = inputs.input_ids
-    input_mask = inputs.attention_mask
-    if use_gpu:
-        input_tokens_tensor = input_tokens_tensor.cuda()
-        input_mask = input_mask.cuda()
     
     model.eval()
     with torch.no_grad():
+        if use_gpu:
+            input_tokens_tensor = inputs.input_ids.cuda()
+            input_mask = inputs.attention_mask.cuda()
         _, logits, feature = model(input_tokens_tensor, input_mask)
         # torch.argsort: Returns the indices that sort a tensor along a given dimension in ascending order by value.
         # sorted, indices = torch.sort(x)

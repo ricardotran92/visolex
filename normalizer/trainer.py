@@ -139,12 +139,18 @@ class Trainer:
 
     def load(self, savefolder):
         model_file = os.path.join(savefolder, "final_model.pt")
-        self.logger.info("Loading student from {}".format(model_file))
-        self.model.load_state_dict(torch.load(model_file))
+        if self.logger: # rev
+            self.logger.info("Loading student from {}".format(model_file))
+        # Fix: always map to correct device
+        if torch.cuda.is_available():
+            self.model.load_state_dict(torch.load(model_file))
+        else:
+            self.model.load_state_dict(torch.load(model_file, map_location=torch.device('cpu')))
         return
 
     def save(self, savefolder):
         model_file = os.path.join(savefolder, "final_model.pt")
-        self.logger.info("Saving model at {}".format(model_file))
+        if self.logger: # rev
+            self.logger.info("Saving model at {}".format(model_file))
         torch.save(self.model.state_dict(), model_file)
         return
