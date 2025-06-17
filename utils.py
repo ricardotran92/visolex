@@ -111,7 +111,7 @@ def delete_special_tokens(token_lst):
 def post_process(sent):
     sent = sent.capitalize()
     sent = re.sub(r'\s+([,\.])', r'\1', sent)
-    if not sent.endswith('.'):
+    if not sent.endswith(('.', '!', '?')):  # rev: cuối câu không có dấu ['.', '!', '?'] sẽ thêm dấu chấm. 
         sent += '.'
     return sent
 
